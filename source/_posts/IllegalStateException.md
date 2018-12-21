@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "jboss的发布目录下部署两个服务引起的异常以及处理"
+title: "java.lang.IllegalStateException: Web app root system property already set to different value"
 date: 2018-12-20 11:24
 comments: true
 tags: 
@@ -16,7 +16,7 @@ tags:
     <param-value>myapp-A.root</param-value>
   </context-param>
 ```
-
+<!--more-->
 - **错误起因**
 在一个jboss的deployment的服务部署目录下放了两个工程的war包, 启动抛异常
 贴出一部分错误堆栈, 安全原因隐藏了三方件的版本信息和工程的包名称, 用A.war和B.war代替了: 

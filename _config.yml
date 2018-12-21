@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 放轻松
-subtitle:
-description:
-keywords:
+title: 博客
+subtitle: 坐和放宽
+description: 某科技金融公司小职员，维护博客站点一枚，记录平凡生活点滴
+keywords: 博客 后端 java
 author: 亨特张
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://blackshao.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
