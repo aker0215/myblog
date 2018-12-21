@@ -1,5 +1,5 @@
 ## 这是一个记录保存博客的地方
-网站: [放轻松](blackshao.com)
+网站: [放轻松](http://blackshao.com)
 
 框架用的是[hexo](https://github.com/hexojs/hexo)
 
