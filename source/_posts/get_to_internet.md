@@ -1,0 +1,110 @@
+---
+layout: post
+title: "科学上网概述"
+date: 2019-01-05 10:37
+comments: true
+tags: 
+	- 笔记
+---
+
+### 科学上网
+#### 现行上网方式，GFW原理
+GFW，即Great Fire Wall, 长城防火墙的简称，是中国政府过滤和监控互联网的一套软硬件系统。GFW的作用主要是用于分析和过滤中国境内外网络间的互相访问。也就是说，他不仅能限制国内网民访问境外的某些站点，也能限制国外用户访问国内的站点。  我们通常说的“被墙”，就是指访问被GFW所限制。而”翻墙“，顾名思义，则是突破GFW的限制。
+
+GFW的工作原理一般被视为国家机密，普遍的看法是通过DNS劫持和IP黑名单等多种机制
+1. 关键词过滤阻断，主要是针对HTTP的80端口，GFW在数据流中发现了特定的关键词后，会阻断网络。在任何阻断发生后，一般在随后的90s内，都无法访问对应IP地址相同端口上的内容
+2. IP地址封锁， 设立IP黑名单，所有路由到该IP的请求都不予转发
+3. 特定端口封锁，特定IP上的特定端口， 如SSH的22、VPN的1723、SSL的443，类似IP地址封锁
+
+<!--more-->
+4. DNS劫持和污染，GFW主要采用DNS劫持和污染技术，使用Cisco提供的IDS系统来进行域名劫持，防止访问被过滤的网站，2002年Google被封锁期间其域名就被劫持到百度。中国部分ISP也会通过此技术插入广告。 
+
+参考链接：[GFW的工作原理](https://blog.csdn.net/u010884939/article/details/40129339)，[GFW的实现原理和技术（墙与翻墙）](https://www.cnblogs.com/weicyNo-1/p/8125763.html)，[防火长城-维基百科](http://zh.wiki.blackshao.com/wiki/%E9%98%B2%E7%81%AB%E9%95%BF%E5%9F%8E)
+
+#### 流行的科学上网方法
+- VPN
+[比较VPN协议: PPTP 对 L2TP 对 OpenVPN 对SSTP 对 IKEv2](https://zh.vpnmentor.com/blog/%E6%AF%94%E8%BE%83vpn%E5%8D%8F%E8%AE%AE-pptp-%E5%AF%B9-l2tp-%E5%AF%B9-openvpn-%E5%AF%B9sstp-%E5%AF%B9-ikev2/)
+[VPN 隧道协议PPTP、L2TP、IPSec和SSLVPN的区别](https://linux.cn/article-3407-1.html)
+- SS
+[shadowsocks的github项目源码](https://github.com/search?q=shadowsocks)
+
+参考链接：[VPN-维基百科](http://zh.wiki.blackshao.com/wiki/%E8%99%9B%E6%93%AC%E7%A7%81%E4%BA%BA%E7%B6%B2%E8%B7%AF)
+
+#### 自建SS服务器
+1. 购买vps（虚拟个人服务器）
+推荐搬瓦工，有钱的话可以去亚马逊或是其他一些云服务厂商
+对延迟要求较高的话，建议优先选择香港日本或者新加坡的服务器，正常ping延迟在100ms左右，美国的话，不是CN2的线路，延迟在200-300ms左右，不是用来玩游戏这类对延迟要求较高的活动的话，影响不大
+2. 服务端搭建
+[Linux安装shadowsocks服务端方法](https://blog.csdn.net/finishx/article/details/79039362)
+3. 端口密码配置
+可以配置多个，多客户端同时使用不影响
+```
+{
+    "server":"my-ssserver",
+    "local_address":"127.0.0.1",
+    "local_port":8888,
+    "port_password":{
+         "9999":"password0",
+         "9001":"password1",
+         "9002":"password2",
+         "9003":"password3",
+         "9004":"password4"
+    },
+    "timeout":600,
+    "method":"aes-256-cfb",
+    "fast_open": false
+}
+```
+4. 客户端配置
+github上下载发布包，配置服务器的ip端口和密码，以及加密方式，链接即可，尝试访问google，可以即表示成功
+
+
+#### PC端解决方案
+无论是Windows还是macOS，在github上都有长期维护的客户端源码和发布包可以使用，安装包小巧轻便无广告。
+<img src="/picture/ss_config.png" width="50%" height="50%">
+
+#### 手机端解决方案
+1. 安卓端-SS客户端
+google play 应用商店下载shadowsocks
+或者github上搜索 shadowsocks 找到安卓版本的下载发布包
+<img src="/picture/WechatIMG13.jpeg" width="30%" height="30%">
+
+2. ios端-VPN
+ios比较特殊，没有对应的API开放，不支持shadowsocks，需要手动部署VPN的服务包
+[针对IOS设备科学上网的IKEv2的服务安装和客户端使用](https://quericy.me/blog/699/)
+
+#### VPS还可以用来干嘛
+- 搭建个人博客
+1. 域名选择购买和使用—— [goddady](https://godaddy.com)
+2. 网站框架选择
+3. nginx
+
+- 利用nginx反向代理境外网站
+代理维基百科：
+```
+server {
+      server_name  ~^(?<subdomain>[^.]+)\.wiki\.blackshao\.com$;
+      listen 80;
+      resolver 8.8.8.8;
+        location /search-redirect.php {
+        proxy_pass https://$subdomain.wikipedia.org;
+        proxy_buffering off;
+
+        proxy_redirect https://$subdomain.wikipedia.org/ http://$subdomain.wiki.blackshao.com/;
+        proxy_redirect https://$subdomain.m.wikipedia.org/ http://$subdomain.m.wiki.blackshao.com/;
+        proxy_cookie_domain $subdomain.wikipedia.org $subdomain.wiki.blackshao.com;
+
+        proxy_set_header X-Real_IP $remote_addr;
+        proxy_set_header User-Agent $http_user_agent;
+        proxy_set_header Accept-Encoding '';
+        proxy_set_header referer "https://$proxy_host$request_uri";
+
+        subs_filter_types text/css text/xml text/javascript application/javascript application/json;
+        subs_filter .wikipedia.org .wiki.blackshao.com;
+        subs_filter //wikipedia.org //wiki.blackshao.com;
+        subs_filter 'https://([^.]+).wiki' 'http://$1.wiki' igr;
+        subs_filter upload.wikimedia.org up.wiki.blackshao.com;
+        more_set_headers -s '302' "Location: http://zh.wiki.blackshao.com/wiki/$arg_search";
+      }
+```
+- 搭建个人网盘、学习linux等等
