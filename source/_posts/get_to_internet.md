@@ -73,6 +73,7 @@ V2Ray是Project V 的核心工具，其主要负责网络协议和功能的实�
 
 #### PC端解决方案
 无论是Windows还是macOS，在github上都有长期维护的客户端源码和发布包可以使用，安装包小巧轻便无广告。
+客户端配置服务器信息：
 <img src="/picture/ss_config.png" width="50%" height="50%">
 
 #### 手机端解决方案
@@ -89,10 +90,13 @@ ios比较特殊，有Shadowrocket等客户端app，但是国区没有开放下�
 #### VPS还可以用来干嘛
 - 搭建个人博客
 1. 域名选择购买和使用—— [goddady](https://godaddy.com)
+如果不是商业用途，建议选择境外的域名服务提供商，国内的域名服务都要求实名备案，申请备案流程会比较长，网站内容可能会面临比较严格的内容审核。
 2. 博客网站框架选择—— [hexo官网](https://hexo.io/zh-cn/docs/index.html)
-3. nginx
+hexo还有很多配套的主题可以使用，配置简单方便，本站就是使用的[yilia](https://github.com/litten/hexo-theme-yilia)主题
+3. Nginx
+Nginx是一款轻量级的Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，可以用来发布一些简单的静态网站。
 
-- 利用nginx反向代理境外网站
+- 利用Nginx反向代理境外网站
 代理维基百科：
 ```
 server {
@@ -120,4 +124,5 @@ server {
         more_set_headers -s '302' "Location: http://zh.wiki.blackshao.com/wiki/$arg_search";
       }
 ```
+
 - 搭建个人网盘、学习linux等等
