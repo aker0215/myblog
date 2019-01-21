@@ -96,8 +96,8 @@ hexo还有很多配套的主题可以使用，配置简单方便，本站就是�
 3. Nginx
 Nginx是一款轻量级的Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，可以用来发布一些简单的静态网站。
 
-- 利用Nginx反向代理境外网站
-代理维基百科：
+- 利用Nginx反向代理境外网站，例如本站反向代理维基百科——[wiki.blackshao.com](http://wiki.blackshao.com)（由于没有用https，所以直接点击搜索联想的词条无法展示，直接搜索即可）
+nginx配置：
 ```
 server {
       server_name  ~^(?<subdomain>[^.]+)\.wiki\.blackshao\.com$;
