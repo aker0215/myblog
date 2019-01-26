@@ -96,33 +96,9 @@ hexo还有很多配套的主题可以使用，配置简单方便，本站就是�
 3. Nginx
 Nginx是一款轻量级的Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器，可以用来发布一些简单的静态网站。
 
-- 利用Nginx反向代理境外网站，例如本站反向代理维基百科——[wiki.blackshao.com](http://wiki.blackshao.com)（由于没有用https，所以直接点击搜索联想的词条无法展示，直接搜索即可）
-nginx配置：
-```
-server {
-      server_name  ~^(?<subdomain>[^.]+)\.wiki\.blackshao\.com$;
-      listen 80;
-      resolver 8.8.8.8;
-        location /search-redirect.php {
-        proxy_pass https://$subdomain.wikipedia.org;
-        proxy_buffering off;
-
-        proxy_redirect https://$subdomain.wikipedia.org/ http://$subdomain.wiki.blackshao.com/;
-        proxy_redirect https://$subdomain.m.wikipedia.org/ http://$subdomain.m.wiki.blackshao.com/;
-        proxy_cookie_domain $subdomain.wikipedia.org $subdomain.wiki.blackshao.com;
-
-        proxy_set_header X-Real_IP $remote_addr;
-        proxy_set_header User-Agent $http_user_agent;
-        proxy_set_header Accept-Encoding '';
-        proxy_set_header referer "https://$proxy_host$request_uri";
-
-        subs_filter_types text/css text/xml text/javascript application/javascript application/json;
-        subs_filter .wikipedia.org .wiki.blackshao.com;
-        subs_filter //wikipedia.org //wiki.blackshao.com;
-        subs_filter 'https://([^.]+).wiki' 'http://$1.wiki' igr;
-        subs_filter upload.wikimedia.org up.wiki.blackshao.com;
-        more_set_headers -s '302' "Location: http://zh.wiki.blackshao.com/wiki/$arg_search";
-      }
-```
+- 利用Nginx反向代理境外网站
+例如:
+本站反向代理维基百科——[wiki.blackshao.com](http://wiki.blackshao.com)（由于没有用https，所以直接点击搜索联想的词条无法展示，直接搜索即可）
+本站代理的谷歌[go.blackshao.com](http://go.blackshao.com)，用的开源的github项目-[ngx_http_google_filter_module](https://github.com/cuber/ngx_http_google_filter_module)
 
 - 搭建个人网盘、学习linux等等
